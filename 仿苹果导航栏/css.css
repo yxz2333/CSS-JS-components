@@ -1,0 +1,15 @@
+.box {
+    width: 100%;
+    height: 132px;
+    /* 设置绝对位置：bottom */
+    position: absolute;
+    bottom: 20%;
+}
+
+.menu {
+    width: 100%;
+    text-align: center;
+    /* 设置绝对位置：bottom */
+    position: absolute;
+    bottom: 0;
+}
