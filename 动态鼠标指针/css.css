@@ -1,0 +1,52 @@
+* {
+    /* cursor设置鼠标属性，通过url引用xml语言描述的矢量图形来改变鼠标属性 */
+    /* URL 和 xy 的坐标偏移值 */
+    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' width='8px' height='8px'><circle cx='4' cy='4' r='4' opacity='.5'/></svg>") 4 4, auto
+}
+
+#cursor {
+    position: fixed;
+    width: 16px;
+    height: 16px;
+    background: #000;
+
+    /* 边框圆角 */
+    border-radius: 8px;
+
+    /* 透明度 */
+    opacity: 0.25;
+
+    /* 层序 */
+    z-index: 10000;
+
+    /* 禁止元素响应鼠标事件 */
+    pointer-events: none;
+
+    /* 设置动画过渡效果 */
+    transition: 0.2s ease-in-out;
+
+    /* 指定[背景颜色、透明度、大小]会触发动画过渡效果 */
+    transition-property: background, opacity, transform;
+}
+
+/* 设置hidden属性 */
+#cursor.hidden {
+    /* 透明度为0 */
+    opacity: 0;
+}
+
+/* 设置悬停属性 */
+#cursor.hover {
+    opacity: 0.1;
+
+    /* 变大 */
+    transform: scale(2.5);
+}
+
+/* 设置按下去的属性 */
+#cursor.active {
+    opacity: 0.5;
+
+    /* 大小变化到0.5倍 */
+    transform: scale(0.5);
+}
