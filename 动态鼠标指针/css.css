@@ -50,3 +50,18 @@
     /* 大小变化到0.5倍 */
     transform: scale(0.5);
 }
+
+a {
+    color: rgb(0, 93, 146);
+    opacity: .7;
+
+    /* 透明度变化的过渡动画 */
+    transition: opacity .2s;
+
+    /* 删去下划线 */
+    text-decoration: none;
+}
+
+a:hover {
+    opacity: 1;
+}

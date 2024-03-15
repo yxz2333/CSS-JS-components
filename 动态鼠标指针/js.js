@@ -3,24 +3,33 @@ class Cursor {
 
     constructor() {
         this.pos = { curr: null, prev: null }; // 坐标
+        this.pt = new Set()  // 可点击元素
         this.create();
         this.init();
         this.render();
     }
 
     init() { // 给事件处理器属性设置函数
-        document.onmousedown = e => this.cursor.classList.add("active");     // 点击的时候添加active 
-        document.onmouseup = e => this.cursor.classList.remove("active");    // 移除active
+        document.onmouseover = event => {
+            // 测试用 console.log(event.target.outerHTML)
+            return this.pt.has(event.target.outerHTML) /* 该元素的源码存在可点击元素里 */ && this.cursor.classList.add("hover");  // 指针浮在可点击元素上     
+        }
 
-        document.onmouseenter = e => this.cursor.classList.remove("hidden"); // 鼠标进页面
-        document.onmouseleave = e => this.cursor.classList.add("hidden");    // 鼠标出页面隐藏圈
+        document.onmouseout = event => this.pt.has(event.target.outerHTML) && this.cursor.classList.remove("hover");
 
-        document.onmousemove = e => {
+        document.onmousedown = event => this.cursor.classList.add("active");     // 点击的时候添加active 
+        document.onmouseup = event => this.cursor.classList.remove("active");    // 移除active
+
+        document.onmouseenter = event => this.cursor.classList.remove("hidden"); // 鼠标进页面
+        document.onmouseleave = event => this.cursor.classList.add("hidden");    // 鼠标出页面隐藏圈
+
+        document.onmousemove = event => {
+            this.cursor.classList.remove("hidden");  // 防穿帮
             if (this.pos.curr === null) // 如果没坐标，定位到鼠标现在的坐标，减8是因为设置的坐标是图片左上角坐标，图片本省是16*16
-                this.move(e.clientX - 8, e.clientY - 8); // e.clientX 和 e.clientY 是事件对象的属性，分别表示鼠标指针在触发事件时相对于浏览器窗口的水平和垂直坐标。
+                this.move(event.clientX - 8, event.clientY - 8); // e.clientX 和 e.clientY 是事件对象的属性，分别表示鼠标指针在触发事件时相对于浏览器窗口的水平和垂直坐标。
             this.pos.curr = { // 设置现在的前驱坐标
-                x: e.clientX - 8,
-                y: e.clientY - 8
+                x: event.clientX - 8,
+                y: event.clientY - 8
             };
         }
     }
@@ -29,9 +38,20 @@ class Cursor {
         if (!this.cursor) {
             this.cursor = document.createElement("div");  // 创建div节点
             this.cursor.id = "cursor";                    // 指定指针id
-            this.cursor.classList.add("hidden");
+            this.cursor.classList.add("hidden");          // 不加这个语句可能会穿帮
             document.body.append(this.cursor);            // 添加cursor到dom里
         }
+
+        var element = document.getElementsByTagName('*'); // 遍历网页所有元素
+        for (let i = 0; i < element.length; i++) {
+            // 测试用 console.log(element[i]);
+            if (
+                window.getComputedStyle(element[i], "cursor") == "pointer" || // 有可点击属性（cursor:pointer）， getComputedStyle解析网页元素的CSS属性
+                (element[i].tagName.toLowerCase() === 'a' && element[i].hasAttribute('href')) // 有实际链接的超链接
+            )
+                this.pt.add(element[i].outerHTML);  // 该元素源码放入数组 outerHTML为元素源码
+        }
+
     }
 
     move(left, top) {  // 设置左上角的坐标
@@ -51,8 +71,6 @@ class Cursor {
         }
         requestAnimationFrame(() => this.render());  // 每次重绘动画的时候都回调render函数
     }
-
-
 }
 
 let CURSOR;
