@@ -8,6 +8,8 @@ html {
 
 body {
     font-size: 2rem;
+
+    /* 弹性盒 */
     display: flex;
 
 }
