@@ -10,6 +10,7 @@
 <body>
     <button onclick="changeBackground()">切换壁纸</button>
     <script>
+        let nowRandomNum, randomNum
         const changeBackground = () => {
             const urlList = [
                 './753fba184b4580b015.png',
@@ -20,8 +21,11 @@
                 './PARQUET_screenshot2023_12_3001_42_21.jpg',
                 'https://pic1.zhimg.com/v2-c6c00f279fb8a978ba6a7b08820e92e8_r.jpg',
             ]
-            const randomNum = Math.floor(Math.random() * urlList.length)
-            document.body.style.backgroundImage = `url(${urlList[randomNum]})`; // 使用正确的数组名和模板字符串
+            while (randomNum === nowRandomNum) randomNum = Math.floor(Math.random() * urlList.length)  // 确保每次的图不一样
+            document.body.style.backgroundImage = `url(${urlList[randomNum]})`;   // 用模板字符串设置背景
+            document.body.style.backgroundSize = 'cover';                         // 背景大小设为覆盖
+            document.body.style.backgroundRepeat = 'no-repeat';                   // 背景不重复
+            nowRandomNum = randomNum
         }
     </script>
 </body>
